@@ -1,0 +1,565 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title> View/Edit Employee </title>
+</head>
+
+<body>
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
+        integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <!-- Our Custom CSS -->
+    <link rel="stylesheet" href="http://localhost:3420/dashboard/style2">
+    <link rel="stylesheet" href="http://localhost:3420/employee/css">
+
+    <meta name="csrf-token" content="XYZ123">
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/axios@0.2.1/dist/axios.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"
+        integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.js"></script>
+
+    <!-- Font Awesome JS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+
+
+    <div id="Index" id="navba">
+        <navbar-component></navbar-component>
+        <div id="navbar-top">
+            <navbar-top></navbar-top>
+            <img src="../images/loading" id="Loading" ref="Loading">
+            <div id="content2" ref="content2">
+                <div class="headin center"> Edit or View Employee </div>
+                <div class="mbox">
+                    <table class="addtable">
+                        <tr>
+                            <td colspan="2"><b class="subheadin">
+                                    <li>Basic Information</li>
+                                </b></td>
+                        </tr>
+                        <tr>
+                            <td><b>Employee Name*</b></td>
+                            <td><input class="form-control" v-if="edit" v-model="myArrayq.name" type="text"
+                                    placeholder="Employee name">
+                            </td>
+                            <td class="edittb" v-if="!edit">{{myArrayq.name}}</td>
+                        </tr>
+                        <tr>
+                            <td><b>Gender</b></td>
+                            <td><select class="form-control" v-if="edit" v-model="myArray.gender">
+                                    <option>Male</option>
+                                    <option>Female</option>
+                                </select>
+                            </td>
+                            <td class="edittb" v-if="!edit">{{myArray.gender}}</td>
+                        </tr>
+                        <tr>
+                            <td><b>Date of Birth</b></td>
+                            <td><input class="form-control" v-if="edit" v-model="myArray.dob" type="date"
+                                    placeholder="Date of birth">
+                            </td>
+                            <td class="edittb" v-if="!edit">{{myArray.dob}}</td>
+                        </tr>
+                        <tr>
+                            <td><b>Father's Name</b></td>
+                            <td><input class="form-control" v-if="edit" v-model="myArray.fname" type="text"
+                                    placeholder="Father Name">
+                            </td>
+                            <td class="edittb" v-if="!edit">{{myArray.fname}}</td>
+                        </tr>
+                        <tr>
+                            <td><b>Father's Number</b></td>
+                            <td><input class="form-control" v-if="edit" v-model="myArray.fnum" type="number"
+                                    placeholder="Father Mobile Number">
+                            </td>
+                            <td class="edittb" v-if="!edit">{{myArray.fnum}}</td>
+                        </tr>
+                        <tr>
+                            <td><b>Mother's Name</b></td>
+                            <td>
+                                <div class="inp-block"><input class="form-control" v-if="edit" v-model="myArray.mname"
+                                        type="text" placeholder="Mother's name"></div>
+                            </td>
+                            <td class="edittb" v-if="!edit">{{myArray.mname}}</td>
+                        </tr>
+                        <tr>
+                            <td><b>Mother's Number</b></td>
+                            <td><input class="form-control" v-if="edit" v-model="myArray.mnum" type="number"
+                                    placeholder="Mother Mobile Number">
+                            </td>
+                            <td class="edittb" v-if="!edit">{{myArray.mnum}}</td>
+                        </tr>
+                        <tr>
+                            <td><b>Email ID</b></td>
+                            <td><input class="form-control" v-if="edit" v-model="myArrayq.email" type="email"
+                                    placeholder="Enter Email ID">
+                            </td>
+                            <td class="edittb" v-if="!edit">{{myArrayq.email}}</td>
+                        </tr>
+
+                        <tr>
+                            <td><b>Landline</b></td>
+                            <td><input class="form-control" v-if="edit" v-model="myArray.land" type="number"
+                                    placeholder="Enter Ladline Number">
+                            </td>
+                            <td class="edittb" v-if="!edit">{{myArray.land}}</td>
+                        </tr>
+                        <tr>
+                            <td><b>Mobile Number</b></td>
+                            <td><input class="form-control" v-if="edit" v-model="myArrayq.pnum" type="number"
+                                    placeholder="Enter Mobile Number">
+                            </td>
+                            <td class="edittb" v-if="!edit">{{myArrayq.pnum}}</td>
+                        </tr>
+
+
+
+
+
+                    </table>
+                </div>
+                <div class="mbox rightside">
+                    <table class="addtable">
+
+                        <tr>
+                            <td>&nbsp</td>
+                            <td>&nbsp</td>
+                        </tr>
+                        <tr>
+                            <td><b>Alternate Num</b></td>
+                            <td><input class="form-control" v-if="edit" v-model="myArray.anum" type="number"
+                                    placeholder="Enter Alternate Number">
+                            </td>
+                            <td class="edittb" v-if="!edit">{{myArray.anum}}</td>
+                        </tr>
+                        <tr>
+                            <td valign="top" style="width: 40%;"><b>Photo</b></td>
+                            <td @click="photo()">
+                                <form id="upload-widget" method="post"
+                                    action="http://localhost:3420/employee/add_emp/uploadpr?id=" class="dropzone"
+                                    v-show="edit">
+                                    <div class="fallback">
+                                        <input name="file" type="file" accept="image/png, image/jpeg , image/jpg" />
+                                    </div>
+
+                                </form>
+                            </td>
+                            <td class="edittb" v-if="!edit">
+                                <img v-bind:src="myArrayq.photo" class="image" width="120px" height="120px">
+                            </td>
+                        </tr>
+
+
+                        <tr>
+                            <td><b>Address Line 1</b></td>
+                            <td><input class="form-control" v-if="edit" v-model="myArray.add1" type="text"
+                                    placeholder="Enter address ">
+                            </td>
+                            <td class="edittb" v-if="!edit">{{myArray.add1}}</td>
+                        </tr>
+                        <tr>
+                            <td><b>Address Line 2</b></td>
+                            <td><input class="form-control" v-if="edit" v-model="myArray.add2" type="text"
+                                    placeholder="Enter address ">
+                            </td>
+                            <td class="edittb" v-if="!edit">{{myArray.add2}}</td>
+                        </tr>
+                        <tr>
+                            <td><b>Adhaar Number</b></td>
+                            <td><input class="form-control" v-if="edit" v-model="myArray.aadhaar" type="text"
+                                    placeholder="Aaadhar number (indian users)">
+                            </td>
+                            <td class="edittb" v-if="!edit">{{myArray.aadhaar}}</td>
+                        </tr>
+                        <tr>
+                            <td><b>PAN Number</b></td>
+                            <td><input class="form-control" v-if="edit" v-model="myArray.pan" type="text"
+                                    placeholder="Pan number (indian users)">
+                            </td>
+                            <td class="edittb" v-if="!edit">{{myArray.pan}}</td>
+                        </tr>
+
+
+                    </table>
+                </div>
+                <div class="mbox">
+                    <table class="addtable">
+                        <tr>
+                            <td colspan="2"><b class="subheadin">
+                                    <li>Work Information</li>
+                                </b></td>
+
+                        </tr>
+                        <tr>
+                            <td><b>Employee ID</b></td>
+                            <td><input class="form-control" v-if="edit" type="text" placeholder="Auto Generated"
+                                    v-model="myArray.empid" readonly>
+                            </td>
+                            <td class="edittb" v-if="!edit">{{myArray.emp_id}}</td>
+                        </tr>
+                        <tr>
+                            <td><b>Date of Joining</b></td>
+                            <td><input class="form-control" v-if="edit" v-model="myArrayq.doj" type="date"
+                                    placeholder="Enter date of joining">
+                            </td>
+                            <td class="edittb" v-if="!edit">{{myArrayq.doj}}</td>
+                        </tr>
+                        <tr>
+                            <td><b>Salary (per month)*</b></td>
+                            <td><input class="form-control" v-if="edit" v-model="myArrayq.salary" type="number"
+                                    placeholder="Enter salary">
+                            </td>
+                            <td class="edittb" v-if="!edit">{{symbol}} {{myArrayq.salary}}</td>
+                        </tr>
+                        <tr>
+                            <td><b>Department*</b></td>
+                            <td><select class="form-control" v-if="edit" v-model="myArrayq.dep">
+                                    <option v-for="i in departments">{{i.depname}}</option>
+                                </select>
+
+                            </td>
+                            <td class="edittb" v-if="!edit">{{myArrayq.dep}}</td>
+                        </tr>
+                        <tr>
+                            <td><b>Designation</b></td>
+                            <td><input class="form-control" v-if="edit" v-model="myArrayq.des" type="text"
+                                    placeholder="Enter Designation">
+                            </td>
+                            <td class="edittb" v-if="!edit">{{myArrayq.des}}</td>
+                        </tr>
+                        <tr>
+                            <td><b>Status</b></td>
+                            <td><select @change="status()" class="form-control" v-if="edit" v-model="myArrayq.status">
+                                    <option>Active</option>
+                                    <option>In-Active</option>
+                                </select>
+                            </td>
+                            <td class="edittb" v-if="!edit">{{myArrayq.status}}</td>
+                        </tr>
+
+                    </table>
+
+                </div>
+                <div class="mbox rightside">
+                    <table class="addtable">
+                        <tr>
+                            <td colspan="2"><b class="subheadin">
+                                    <li>Bank Information</li>
+                                </b></td>
+
+                        </tr>
+                        <tr>
+                            <td><b>Account Holder Name</b></td>
+                            <td><input v-if="edit" class="form-control" v-if="edit" v-model="myArray.accname"
+                                    type="text" placeholder="Acc. holder name">
+                            </td>
+                            <td class="edittb" v-if="!edit">{{myArray.accname}}</td>
+                        </tr>
+                        <tr>
+                            <td><b>Account Number</b></td>
+                            <td><input class="form-control" v-if="edit" v-model="myArray.accnum" type="text"
+                                    placeholder="Acc. number">
+                            </td>
+                            <td class="edittb" v-if="!edit">{{myArray.accnum}}</td>
+                        </tr>
+
+
+                        <tr>
+                            <td><b>Bank Name</b></td>
+                            <td><input class="form-control" v-if="edit" v-model="myArray.bname" type="text"
+                                    placeholder="Bank Name">
+                            </td>
+                            <td class="edittb" v-if="!edit">{{myArray.bname}}</td>
+                        </tr>
+                        <tr>
+                            <td><b>Branch IFSC Code</b></td>
+                            <td><input class="form-control" v-if="edit" v-model="myArray.ifsc" type="text"
+                                    placeholder="IFSC Code">
+                            </td>
+                            <td class="edittb" v-if="!edit">{{myArray.ifsc}}</td>
+                        </tr>
+                        <tr>
+                            <td><b>Branch</b></td>
+                            <td><input class="form-control" v-if="edit" v-model="myArray.branch" type="text"
+                                    placeholder="Branch">
+                            </td>
+                            <td class="edittb" v-if="!edit">{{myArray.branch}}</td>
+                        </tr>
+
+                    </table>
+
+                </div>
+
+                <div class="doc"><b>
+                        <li>Already uploaded Documents !</li>
+                    </b><br>
+                    <a v-bind:href="myArray.doc1"><img class="docum" v-bind:src="myArray.doc1"
+                            v-show="myArray.doc1!=null"></a>
+
+                    <a v-bind:href="myArray.doc2"><img class="docum" v-bind:src="myArray.doc2"
+                            v-show="myArray.doc2!=null"></a>
+                    <a v-bind:href="myArray.doc3"><img class="docum" v-bind:src="myArray.doc3"
+                            v-if="myArray.doc3!=null"></a>
+                    <a v-bind:href="myArray.doc4"><img class="docum" v-bind:src="myArray.doc4"
+                            v-if="myArray.doc4!=null"></a>
+                    <a v-bind:href="myArray.doc5"><img class="docum" v-bind:src="myArray.doc5"
+                            v-if="myArray.doc5!=null"></a>
+                </div>
+                <div class="doc" v-show="myArray.doc1==null">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No Documents Uploaded !
+                </div>
+                <div class="subheadin doc" v-if="edit">
+                    <li>Upload More Documents !</li>
+                </div>
+                <div @click="docum()">
+                    <form id="upload-widget" v-show="edit" method="post"
+                        action="http://localhost:3420/employee/add_emp/upload" class="dropzone doc">
+                        <div class="fallback">
+                            <input name="file" type="file" multiple />
+                        </div>
+                    </form>
+                </div>
+
+                <div v-if="error" class="error">
+                    {{message_error}} !
+                </div> <br>
+                <div v-if="success" class="success">
+                    {{message_success}} !
+                </div> <br>
+                <div class="center">
+                    <button @click="save()" id='mybtn' style="padding: 5px 30px;" class="btn btn-success"
+                        v-if="edit">{{word}}
+                    </button>
+                </div>
+                <div class="center">
+                    <button @click="editfun()" style="padding: 5px 30px;" class="btn btn-warning"
+                        v-if="!edit">EDIT</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <script src="https://unpkg.com/vue@2.6.11/dist/vue.js"></script>
+    <script src="http://localhost:3420/navbar2"></script>
+
+    <!-- jQuery CDN - Slim version (=without AJAX) -->
+    <script>
+        var log = new Vue({
+            el: "#Index",
+            data: {
+                myArray: [],
+                myArrayq: [],
+                empid: 420,
+                edit: 0,
+                departments: ['Dep1'],
+                success: 0,
+                error: 0,
+                message_error: "Dont leave empty response",
+                message_success: "Configartions changed and saved!",
+                word: 'Save',
+                time: 0,
+                symbol: '',
+            },
+            created: function () {
+
+                this.load();
+            },
+            methods: {
+                load: async function () {
+
+                    var app = this;
+                    var params = this.getParams(window.location.href)
+                    console.log(params)
+                    await axios.get('http://localhost:3420/employee/api/quickemp?empid=' + params.empid)
+                        .then(function (Response1) {
+                            app.myArrayq = Response1
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                            log.error = 1
+                            log.message_error = "Error connecting the database try again later !"
+                            log.loaderoff()
+                        })
+                    await axios.get('http://localhost:3420/employee/api/emp?empid=' + params.empid)
+                        .then(function (Response2) {
+                            console.log("Here Comes")
+
+                            app.myArray = Response2[0]
+                            app.symbol = Response2[1]
+                            var loading = app.$refs.Loading
+                            loading.style.display = "none"
+                            var content = app.$refs.content2
+                            content.style.display = "block"
+
+
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                            log.error = 1
+                            log.message_error = "Error connecting the database try again later !"
+                            log.loaderoff()
+                        })
+                    await axios.get('http://localhost:3420/department/api/dep')
+                        .then(function (Response) {
+                            log.departments = Response
+                            log.loaderoff()
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                            log.error = 1
+                            log.message_error = "Error connecting the database try again later !"
+                            log.loaderoff()
+                        })
+
+
+                }, loaderoff() {
+                    var app = this;
+                    var loading = app.$refs.Loading
+                    loading.style.display = "none"
+                    var content = app.$refs.content2
+                    content.style.display = "block"
+                }, status() {
+                    $.post('./api/active', {
+                        status: log.myArrayq.status,
+                        emp_id: log.myArrayq.emp_id
+                    }, function (data) {
+                        console.log(data.message)
+                        if (data.message != 'true') {
+                            log.error = 1
+                            log.message_error = data.message
+
+                        } else {
+                            log.error = 0
+                            log.success = 1
+                            log.message_success = "Employee Status changed to " + log.myArrayq.status
+
+
+                        }
+                    })
+
+
+                }, getParams(url) {
+                    var params = {};
+                    var parser = document.createElement('a');
+                    parser.href = url;
+                    var query = parser.search.substring(1);
+                    var vars = query.split('&');
+                    for (var i = 0; i < vars.length; i++) {
+                        var pair = vars[i].split('=');
+                        params[pair[0]] = decodeURIComponent(pair[1]);
+                    }
+                    return params;
+                }, editfun() {
+                    this.edit = !this.edit
+                }, photo() {
+                    this.time = 0.5
+                }, docum() {
+                    this.time = 0.5
+                }, save() {
+                    console.log("CLICKED")
+                    $('#mybtn').prop('disabled', true);
+                    if (this.dep == '') {
+                        this.error = 1;
+                        $('#mybtn').prop('disabled', false);
+                        this.message_error = "Department field cannot be left Empty ! "
+                        return;
+                    }
+                    if (this.salary == "") {
+                        this.error = 1;
+                        $('#mybtn').prop('disabled', false);
+                        this.message_error = "Salary field cannot be left Empty ! "
+                        return;
+                    } else {
+                        $('#mybtn').prop('disabled', true);
+                        this.word = "Saving..."
+                        setTimeout(function () {
+                            $.post('./edit_empdata', {
+                                empid: log.myArray.emp_id,
+                                fname: log.myArray.fname,
+                                mname: log.myArray.mname,
+                                gender: log.myArray.gender,
+                                dob: log.myArray.dob,
+                                aadhaar: log.myArray.aadhaar,
+                                pan: log.myArray.pan,
+                                fnum: log.myArray.fnum,
+                                pnum: log.myArrayq.pnum,
+                                mnum: log.myArray.mnum,
+                                anum: log.myArray.anum,
+                                add1: log.myArray.add1,
+                                add2: log.myArray.add2,
+                                land: log.myArray.land,
+                                salary: log.myArrayq.salary,
+                                bname: log.myArray.bname,
+                                ifsc: log.myArray.ifsc,
+                                accnum: log.myArray.accnum,
+                                accname: log.myArray.accname,
+                                branch: log.myArray.branch,
+                                status: log.myArrayq.status,
+                                name: log.myArrayq.name,
+                                doj: log.myArrayq.doj,
+                                des: log.myArrayq.des,
+                                dep: log.myArrayq.dep,
+                                email: log.myArrayq.mail,
+                                photo: log.myArrayq.photo,
+                                doc1: log.myArray.doc1,
+                                doc2: log.myArray.doc2,
+                                doc3: log.myArray.doc3,
+                                doc4: log.myArray.doc4,
+                                doc5: log.myArray.doc5,
+                            }, function (data) {
+                                console.log(data.message)
+                                if (data.message != 'true') {
+                                    log.error = 1
+                                    log.message_error = data.message
+                                    $('#mybtn').prop('disabled', false);
+                                } else {
+                                    log.error = 0
+                                    log.success = 1
+                                    log.message_success = "Employee Information Updated SuccessFully !"
+                                    log.word = 'Save',
+                                        log.edit = !log.edit
+                                    setTimeout(function () {
+                                        log.success = 0
+                                        window.location.reload(true)
+                                    }, 1000);
+                                }
+                            })
+                        }, log.time * 1000);
+                    }
+                }
+
+            }
+        })
+    </script>
+    <script type="text/javascript">
+        Dropzone.options.uploadWidget = {
+            paramName: 'file',
+            maxFilesize: 0.5,
+            maxFiles: 5,
+            dictDefaultMessage: 'Drag an image here to upload, or click to select one',
+            headers: {
+                'x-csrf-token': document.querySelector('meta[name=csrf-token]').getAttributeNode('content').value,
+            },
+            acceptedFiles: 'image/*',
+            init: function () {
+                this.on('success', function (file, resp) {
+                    console.log(resp);
+                    console.log("UPLOADED SUCCESFULL")
+                });
+
+            },
+
+        };
+    </script>
+
+    <script src="http://localhost:3420/navbar2/collapsing"></script>
+</body>
+
+</html>

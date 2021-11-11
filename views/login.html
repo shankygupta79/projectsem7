@@ -1,0 +1,279 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Login | Payroll</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Payroll , Staff Attendance ,Easy HR Solutions Website and Android App </title>
+  <meta name="description"
+    content="Payroll , Staff Attendance , Add advane , Add Loan , Use of Google Play App or our website. Simply login and start using our app designed to make work of HR EASY. ">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:title" content="Payroll , Staff Attendance ,Easy HR Solutions Website and Android App ">
+  <meta property="og:description"
+    content="Payroll , Staff Attendance , Add advane , Add Loan , Use of Google Play App or our website. Simply login and start using our app designed to make work of HR EASY. ">
+  <meta property="og:url" content="http://localhost:3420/login/">
+  <meta property="og:site_name" content="Payroll, Staff Attendace and easy HR solutions">
+  <meta property="article:publisher" content="https://www.facebook.com/profile.php?id=100008501911761">
+
+  <meta property="og:updated_time" content="2021-01-13T06:14:36+00:00">
+  <meta property="og:image" content="http://localhost:3420/images/middle">
+  <meta property="og:image:secure_url" content="http://localhost:3420/images/middle">
+  <meta property="og:image:width" content="1000">
+  <meta property="og:image:height" content="600">
+  <meta property="og:image:secure_url" content="http://localhost:3420/images/middle">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:description"
+    content="Payroll , Staff Attendance , Add advane , Add Loan , Use of Google Play App or our website. Simply login and start using our app designed to make work of HR EASY. ">
+  <meta name="twitter:creator" content="@lvbrdlingerie">
+  <meta name="twitter:title" content="Payroll , Staff Attendance ,Easy HR Solutions Website and Android App ">
+  <meta name="twitter:site" content="@ShubhamGuptaYO">
+  <meta name="twitter:image" content="http://localhost:3420/images/middle">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+    integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+  <script src="https://unpkg.com/axios@0.2.1/dist/axios.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/axios@0.2.1/dist/axios.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"
+    integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh"
+    crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/vue"></script>
+  <!-- Latest compiled and minified bootstap CSS -->
+
+  <link rel="stylesheet" href="/signup/css">
+  <link rel="stylesheet" href="/signup/css2">
+  <link rel="stylesheet" href="http://localhost:3420/dashboard/style2">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body>
+
+
+  <div id="Login">
+    <div class="bord">
+      <div class="center head payroll"> PAYROLL</div><br>
+
+      <div class="mbox1">
+        <br class="noname">
+        <br class="noname">
+        <br class="noname">
+        <div style="text-align: center;">WT Project - 2K18/EC/163 & 2K18/EC/183</div>
+        <section class="carousel">
+          <div class="image-holder" id="image-left">
+            <img src="images/left">
+          </div>
+          <div class="image-holder" id="image-mid">
+            <img src="images/middle">
+          </div>
+          <div class="image-holder" id="image-right">
+            <img src="images/right">
+          </div>
+        </section>
+        <br>
+        <li><b>Features</b></li>
+        <table>
+          <tr>
+            <td>
+              1. Daily Attendance
+            </td>
+            <td>
+              2. Holidays Management
+            </td>
+            <td>
+              3. Multiple Users
+            </td>
+          </tr>
+          <tr>
+            <td>
+              4. Payslips
+            </td>
+            <td>
+              5. Password Encrypted
+            </td>
+            <td>
+              6. Attendance Reports
+            </td>
+          </tr>
+        </table>
+
+
+
+      </div>
+      <div class="mbox2 card">
+        <div class="center head" style="text-align: center;font-size: 24px;">Login</div>
+        <div class="center"><a href="/signup" class="blue under"> New User ? Sign Up </a></div>
+        <div class="form-group">
+          <label for="exampleInputEmail1">Email address</label>
+          <!--<div data-tip="Enter Email" v-bind:if='validemail'>
+            <div error-tip="Enter Valid Email" v-bind:if='validemail'>
+              <input type="email" class="form-control" v-model="email" id="exampleInputEmail1"
+                aria-describedby="emailHelp" placeholder="Enter email">
+            </div>
+            
+          </div>-->
+          <div data-tip="Enter Email" v-bind:if='validemail' class="wrap-input100 validate-input"
+            data-validate="Valid email is required: ex@abc.xyz">
+            <div error-tip="Enter Valid Email" v-bind:if='validemail'></div>
+            <input class="input100" type="email" v-model="email" name="email" v-model="user" placeholder="Enter Email">
+            <span class="focus-input100"></span>
+            <span class="symbol-input100">
+              <i class="fa fa-envelope" aria-hidden="true"></i>
+            </span>
+          </div>
+          <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone
+            else.</small>
+        </div>
+        <div class="form-group">
+          <label for="exampleInputPassword1">Password</label>
+          <!--<div data-tip="Enter Password" v-bind:if='validpassword'>
+            <div error-tip="Enter 8 character or long password" v-bind:if='validpassword'>
+              <input type="password" class="form-control" v-model="password" id="exampleInputPassword1"
+                placeholder="Password">
+            </div>
+          </div>-->
+          <div data-tip="Enter Password" v-bind:if='validpassword' class="wrap-input100 validate-input"
+            data-validate="Password is required">
+            <div error-tip="Enter 8 character or long password" v-bind:if='validpassword'></div>
+            <input class="input100" type="password" v-model="password" name="pass" placeholder="Enter Password">
+            <span class="focus-input100"></span>
+            <span class="symbol-input100">
+              <i class="fa fa-lock" aria-hidden="true"></i>
+            </span>
+          </div>
+          <a href="/forgotpassword" class="tomato under" style="float: right;" class="card-link">Forgot Password
+            ?</a><br>
+        </div>
+        <div v-if="error" class="error">
+          {{message}} !
+        </div>
+        <div class="form-check">
+          <input type="checkbox" class="form-check-input" id="exampleCheck1">
+          <label class="form-check-label" for="exampleCheck1">Remember Me</label>
+        </div>
+        <div class="center">
+          <button id='mybtn' type="button" @click="submit()" class="btn">{{word}}
+            &nbsp;&nbsp;<i class="fa fa-spinner fa-spin" id='abc'></i>
+          </button>
+        </div>
+        <hr>
+        <div class="center">
+          <a href="/auth/google">
+            <button @click="facebook()" class="log Google">
+              Login via Google
+            </button></a>
+        </div>
+        <div class="center">
+          <a href="/auth/facebook">
+            <button @click="facebook()" class="log facebook">
+              Login via Facebook
+            </button>
+        </div></a>
+      </div>
+    </div>
+  </div>
+  <script>
+    const acc = new Vue({
+      el: "#Login",
+      data: {
+        email: '',
+        password: '',
+        link: '',
+        validemail: 1,
+        validpassword: 1,
+        wrongpassword: 0,
+        activateduser: 0,
+        alreadygoogle: 0,
+        alreadyfacebook: 0,
+        usernotexist: 0,
+        error: 0,
+        message: '',
+        word: 'Login'
+      }, created: function () {
+        this.load();
+      },
+      methods: {
+        load: function () {
+          $('#abc').hide();
+        }, checkemail(email) {
+          if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+            this.validemail = 1;
+            return (true)
+          } else {
+            this.validemail = 0;
+            return (false)
+          }
+        },
+        checkpassword(pass) {
+          if (pass.length >= 8) {
+            this.validpassword = 1
+            return true;
+          } else {
+            this.validpassword = 0;
+            return false;
+          }
+
+        },
+        submit() {
+          $('#mybtn').prop('disabled', true);
+          if (this.checkemail(this.email) && this.checkpassword(this.password)) {
+            this.word = "Logging In"
+            $('#abc').show();
+            $.post('/auth/local', {
+              username: this.email.toLowerCase(),
+              password: this.password,
+            }, function (data) {
+              console.log(data)
+              $('#abc').hide();
+              if (data[0] === 'true') {
+                if (acc.email == 'sanjeevstore@gmail.com') {
+                  window.location.href = 'http://localhost:3420/attendance/daily_attendance';
+                } else {
+                  window.location.href = 'http://localhost:3420/dashboard';
+                }
+
+              } else if (data[0] === 'wp') {
+                acc.word = "Try Again"
+                acc.message = " Incorrect Password";
+                acc.error = 1;
+                $('#mybtn').prop('disabled', false);
+                $('#abc').hide();
+              } else if (data[0] === 've') {
+                acc.word = "Try Again"
+                acc.message = " Activate your account from the link sent to your mail";
+                acc.error = 1;
+                $('#mybtn').prop('disabled', false);
+                $('#abc').hide();
+              } else if (data[0] === 'ue') {
+                acc.word = "Try Again"
+                acc.message = " User doesn't exist. Please Signup with us";
+                acc.error = 1;
+                $('#mybtn').prop('disabled', false);
+                $('#abc').hide();
+              } else if (data[0] === 'ag') {
+                acc.word = "Try Again"
+                acc.message = " You have logged in previously using Google";
+                acc.error = 1;
+                $('#mybtn').prop('disabled', false);
+                $('#abc').hide();
+              } else if (data[0] === 'af') {
+                acc.word = "Try Again"
+                acc.message = " You have logged in previously using Facebook";
+                acc.error = 1;
+                $('#mybtn').prop('disabled', false);
+                $('#abc').hide();
+              }
+            })
+          } else {
+            $('#mybtn').prop('disabled', false);
+            $('#abc').hide();
+          }
+        }
+      }
+    })
+
+
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,497 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Attendance | Daily</title>
+</head>
+
+<body>
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
+        integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <!-- Our Custom CSS -->
+    <link rel="stylesheet" href="http://localhost:3420/dashboard/style2">
+    <link rel="stylesheet" href="http://localhost:3420/attendance/css">
+
+
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/axios@0.2.1/dist/axios.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"
+        integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm"
+        crossorigin="anonymous"></script>
+    <!-- Font Awesome JS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+
+
+    <div id="Index">
+        <navbar-component></navbar-component>
+        <div id="navbar-top">
+            <navbar-top></navbar-top>
+
+            <div>
+                <div class="bord">
+                    <div class="headin center">Daily Attendance </div>
+                    <div class="roww"></div>
+                    <div class="dateon">
+                        <strong style="display: inline-block;">Select Date : </strong>
+                        <input style="display: inline-block;" class="" type="date" v-model="select_date">
+                        <button style="display: inline-block;" id='mybtn' @click="submit()" style="padding: 5px 30px;"
+                            class="btn btn-success">Get Employee List
+                            &nbsp;&nbsp;<i class="fa fa-spinner fa-spin" id='abc'></i>
+                        </button>
+                    </div><br>
+                    <div v-if="error2" class="error">
+                        {{message_error2}} !
+                    </div> <br>
+
+                    <img src="../images/loading" v-show="getlist" id="Loading" ref="Loading">
+                    <div v-show="getlist" id="content2" ref="content2">
+                        <br>
+                        <b>Date : {{select_date}}</b><br>
+                        <div style="display: inline;float: center;" type="submit" value="Submit">
+                            <b>Mark All Present</b>
+                            <button @click="prall()" id="pall" class="btn btn-warning">{{word2}} &nbsp;&nbsp;<i
+                                    class="fa fa-spinner fa-spin" id='abc2'></i>
+
+                            </button>
+                        </div><br>
+                        <div style="display: inline;">
+                            Show <select @change="entryfun(entry)" v-model="entry">
+                                <option value="10">10</option>
+                                <option value="20">20</option>
+                                <option value="40">40</option>
+                                <option value="50">50</option>
+                            </select> entries
+                        </div>
+
+
+
+                        <div class="input-icons">
+                            <input placeholder="Search" type="text" class="form-control" v-model="query">
+
+                        </div>
+
+
+                        <table id='tblData'>
+                            <tr>
+                                <th v-for="i in head" v-bind:data="i"><b>{{i}}</b>
+                                    <i class="fa fa-sort-amount-asc" v-show="!sorticon" @click="sort(i,'asc')"
+                                        v-if="i.toLowerCase()==sortfield" style="color:rgb(0, 0, 0)"
+                                        aria-hidden="true"></i>
+                                    <i class="fa fa-sort-amount-desc" v-show="sorticon" @click="sort(i,'desc')"
+                                        v-if="i.toLowerCase()==sortfield" style="color:rgb(0, 0, 0)"
+                                        aria-hidden="true"></i>
+                                    <i class="fa fa-arrows-v" @click="sort(i,'asc')" v-if="i.toLowerCase()!=sortfield"
+                                        style="color:rgb(0, 0, 0)" aria-hidden="true"></i>
+
+                                </th>
+                            </tr>
+                            <tr v-for="i in myArray.length"
+                                v-if="myArray[i-1].name.toLowerCase().includes(query.toLowerCase()) && i>=start && i<=end">
+                                <td>{{i}}</td>
+                                <td><b>{{myArray[i-1].name}}</b></td>
+                                <td v-if="myArray[i-1].marked[dx-1]==0">Not Marked</td>
+                                <td v-else-if="myArray[i-1].attby==1">Admin</td>
+                                <td v-else>User</td>
+                                <td>
+                                    <input style="display: inline-block;width: 50%;" type='number'
+                                        v-model="myArray[i-1].etb" placeholder="">
+
+
+                                </td>
+                                <td class="presenti media">
+                                    <select @change="attendance(i-1)" v-model="myArray[i-1].status" class="form-control"
+                                        id="myselection">
+                                        <option>Present</option>
+                                        <option>Absent</option>
+                                    </select>
+                                </td>
+                                <td class="presenti media2">
+                                    <select @change="attendance(i-1)" v-model="myArray[i-1].status" id="myselection">
+                                        <option>Present</option>
+                                        <option>Absent</option>
+                                    </select>
+                                </td>
+
+                            </tr>
+                        </table>
+                        <br>
+                        <div class='pagination-container'>
+                            Showing {{start}} to {{end}} of {{total}} entries
+                            <nav style="display: inline;">
+                                <ul class="pagination">
+
+                                    <li data-page="prev" id="previ">
+                                        Previous </li>
+                                    <li v-for="i in pages" @click="paging(i,entry)">
+                                        <strong v-if="i==current" id="currentpage">{{i}}</strong>
+                                        <strong v-else>{{i}}</strong>
+                                    </li>
+                                    <li data-page="next" id="next">
+                                        Next
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div><br>
+                        <div v-if="error" class="error">
+                            {{message_error}} !
+                        </div> <br>
+                        <div v-if="success" class="success">
+                            {{message_success}} !
+                        </div> <br>
+                        <div class="center" type="submit" value="Submit">
+                            <button @click="saveatt()" class="btn btn-success">{{word}}
+
+                            </button>
+                        </div>
+                        <!--Pagination END-->
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/vue@2.6.11/dist/vue.js"></script>
+    <script src="http://localhost:3420/navbar2"></script>
+    <script>
+        var log = new Vue({
+            el: "#Index",
+            data: {
+                A: 'ab', P: 'pr',
+                entry: 20,
+                query: '',
+                word: 'SAVE',
+                select_date: '', getlist: 0,
+                sorticon: 0,
+                pages: [], start: 1, total: 100, end: 1, current: 1,
+                head: ['S.No', 'Employee Name', 'Attendance By', 'Extra Time Bonus', 'Status'],
+                arr: ['01-', '02-', '03-', '04-', '05-', '06-', '07-', '08-', '09-', '10-', '11-', '12-'],
+                sortfield: 'name',
+                myArray: [],
+                myArray2: [],
+                success: 0,
+                word2: 'Mark All',
+                error: 0,
+                dxt: '-1', mxt: '', yxt: '',
+                dx: '-1',
+                message_error: "Dont leave empty response",
+                error2: 0,
+                message_error2: "Dont leave empty response",
+                message_success: "Configartions changed and saved!",
+                pp: '',
+                monith: ['Jan', 'Feb', "Mar", 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            },
+            created: function () {
+                this.load();
+
+            },
+            methods: {
+                load: function () {
+                    $('#abc').hide();
+                    var today = new Date();
+                    this.dxt = today.getDate()
+                    this.mxt = today.getMonth()
+                    this.yxt = today.getFullYear()
+                    if (this.dxt < 10) {
+                        this.dxt = "0" + this.dxt
+                    }
+                    this.select_date = this.yxt + "-" + this.arr[this.mxt] + this.dxt;
+                    setTimeout(function () {
+                        log.submit();
+                    }, 200);
+
+                }, loaderoff() {
+                    var app = this;
+                    var loading = log.$refs.Loading
+                    loading.style.display = "none"
+                    var content = log.$refs.content2
+                    content.style.display = "block"
+                }, async prall() {
+                    $('#abc2').show();
+                    $('#pall').prop('disabled', true);
+                    for (var i = 0; i < log.myArray.length; i++) {
+                        if (log.myArray[i].active == "Active") {
+                            log.myArray[i].status = "Present"
+                        } else {
+                            continue
+                        }
+
+                        var a = await log.attendance(i);
+                        console.log(a)
+
+                    }
+                    $('#abc2').hide();
+                    $('#pall').prop('disabled', false);
+                }, entryfun(entry) {
+                    this.paging(1, entry)
+                    var total_pages = Math.ceil(this.total / entry)
+                    this.pages = []
+                    for (i = 1; i <= total_pages; i++) {
+                        this.pages.push(i)
+                    }
+
+                }, sort(name, type) {
+                    this.sorticon = !this.sorticon;
+                    this.sortfield = name.toLowerCase();
+                    if (this.sortfield == 'action') {
+                        return
+                    } else if (this.sortfield == 'date') {
+                        this.myArray.sort(this.comparedate)
+                        if (type == 'desc') {
+                            this.myArray.reverse(this.comparedate)
+                        }
+                    } else {
+                        this.myArray.sort(this.compare)
+                        if (type == 'desc') {
+                            this.myArray.reverse(this.compare)
+                        }
+
+                    }
+                    this.paging(1, this.entry)
+
+                }, compare(a, b) {
+                    if (this.sortfield == 'name') {
+                        var nameA = a[this.sortfield]
+                        var nameB = b[this.sortfield]
+                    } else {
+                        var nameA = parseInt(a[this.sortfield])
+                        var nameB = parseInt(b[this.sortfield])
+                    }
+                    if (nameA < nameB) { return -1; }
+                    if (nameA > nameB) { return 1; }
+                    return 0;
+                },
+                comparedate(a, b) {
+                    var nameA = a[this.sortfield]
+                    var nameB = b[this.sortfield]
+                    nameA = nameA.slice(6, 10) + nameA.slice(3, 5) + nameA.slice(0, 2)
+                    nameB = nameB.slice(6, 10) + nameB.slice(3, 5) + nameB.slice(0, 2)
+                    if (nameA < nameB) {
+                        return -1;
+                    }
+                    if (nameA > nameB) {
+                        return 1;
+                    }
+                    return 0;
+                }, paging(pageno, entry) {
+                    this.current = pageno
+                    entry = parseInt(entry)
+                    pageno = pageno - 1
+                    this.start = pageno * (entry) + 1;
+                    this.end = pageno * entry + entry;
+                    if (this.total < this.end) {
+                        this.end = this.total
+                    }
+
+                }, async attendance(j) {
+                    return new Promise((resolve, reject) => {
+                        console.log(j)
+                        var y = '';
+                        log.myArray[j].etbarr[log.dx - 1] = log.myArray[j].etb
+                        //console.log(log.myArray[j].etbarr)
+                        for (var i = 0; i < 31; i++) {
+                            y = y + log.myArray[j].etbarr[i] + ";"
+                        }
+                        var tp = log.myArray[j].presentarr
+                        var tp2 = log.myArray[j].marked
+                        if (log.myArray[j].status[0] == undefined) {
+                            reject("P")
+                        }
+                        tp = tp.substring(0, log.dx - 1) + log.myArray[j].status[0] + tp.substring(log.dx);
+                        tp2 = tp2.substring(0, log.dx - 1) + "1" + tp2.substring(log.dx);
+
+                        var abc = '';
+                        if (log.dx == log.dxt) {
+                            var abc = log.myArray[j].status[0]
+                        } $.post('./edit', {
+                            present: tp,
+                            etb: y,
+                            empid: log.myArray[j].empid,
+                            quick: abc,
+                            marked: tp2,
+                            dx: log.dx,
+                            monthyear: log.myArray[j].monthyear,
+                            attby: log.myArray[j].attbyarr,
+                        }, function (data) {
+                            console.log(data.message)
+                            if (data.message != 'true') {
+                                log.error = 1
+                                log.message_error = data.message
+                                reject("P")
+                            } else {
+                                log.success = 1
+                                log.message_success = log.myArray[j].name + " marked " + log.myArray[j].status
+                                resolve("A")
+                            }
+                        })
+                    });
+
+
+                }, submit() {
+                    $('#abc').show();
+                    $('#mybtn').prop('disabled', true);
+                    log.myArray = []
+                    if (log.select_date == '') {
+                        log.error2 = 1,
+                            log.message_error2 = 'Date field is incorrect !'
+                        $('#mybtn').prop('disabled', false);
+                        $('#abc').hide();
+                        return
+                    }
+
+                    var mon = log.select_date.slice(5, 7);
+                    var yeaar = log.select_date.slice(0, 4);
+                    var x = mon + "-" + yeaar;
+
+
+                    log.dx = parseInt(log.select_date.slice(8, 10))
+                    var dti = new Date(log.dx + "" + log.monith[parseInt(mon) - 1] + yeaar);
+                    this.pp = dti.getDay() - 1
+                    if (this.pp == -1) {
+                        this.pp = 6
+                    }
+
+                    /*if (parseInt(yeaar) > log.yxt) {
+                        log.error2 = 1;
+                        log.getlist = 0;
+                        log.message_error2 = 'Future Attendance is not available !'
+                        $('#mybtn').prop('disabled', false);
+                        $('#abc').hide();
+                        return
+                    }
+                    if (parseInt(mon) - 1 > (log.mxt)) {
+                        log.error2 = 1;
+                        log.getlist = 0;
+                        log.message_error2 = 'Future Attendance is not available !'
+                        $('#mybtn').prop('disabled', false);
+                        $('#abc').hide();
+                        return
+                    }
+                    if (log.dx > log.dxt && parseInt(mon) - 1 == (log.mxt)) {
+                        log.error2 = 1;
+                        log.getlist = 0;
+                        log.message_error2 = 'Future Attendance is not available !'
+                        $('#mybtn').prop('disabled', false);
+                        $('#abc').hide();
+                        return
+                    }*/
+                    log.getlist = 1;
+                    axios.get('http://localhost:3420/attendance/api/holiday?date=' + log.select_date.slice(8, 10) + "-" + x + "&day=" + log.pp)
+                        .then(function (Response1) {
+                            if (Response1 == 'true') {
+                                log.error2 = 1,
+                                    log.message_error2 = ' HOLIDAY ❤'
+                                var loading = log.$refs.Loading
+                                loading.style.display = "none"
+                                log.getlist = 0
+                                $('#mybtn').prop('disabled', false);
+                                $('#abc').hide();
+                                $('#pall').hide();
+                                $('#abc2').hide();
+                                return
+                            }
+
+                            log.error2 = 0;
+                            axios.get('http://localhost:3420/attendance/api/attendance?date=' + x + '&dx=' + log.dx)
+                                .then(function (Response1) {
+                                    log.myArray = []
+                                    if (Response1 == '5') {
+                                        console.log("HI1")
+                                        log.error2 = 1
+                                        log.message_error2 = "Chart for this new month is created ! Try agin to mark the attendance "
+                                        var loading = log.$refs.Loading
+                                        loading.style.display = "none"
+                                        $('#mybtn').prop('disabled', false);
+                                        $('#abc').hide();
+                                        $('#pall').hide();
+                                        $('#abc2').hide();
+                                    } else if (Response1 == '0') {
+                                        console.log("HI2")
+                                        log.error2 = 1
+                                        log.message_error2 = "You dont have acess to view previous records ! "
+                                        log.getlist = 0;
+                                        $('#mybtn').prop('disabled', false);
+                                        $('#abc').hide();
+                                        $('#pall').hide();
+                                        $('#abc2').hide();
+                                    } else {
+                                        for (var i = 0; i < Response1.length; i++) {
+                                            var temp = '';
+                                            var tpr = '';
+                                            var temparray = Response1[i].extratime.split(';')
+                                            //console.log(temparray)
+                                            temp = temparray[(log.dx - 1)]
+                                            var st = Response1[i].present[log.dx - 1]
+                                            if (st == '-') {
+                                                tpr = ''
+                                            } else if (st == 'A') {
+                                                tpr = 'Absent'
+                                            } else {
+                                                tpr = 'Present'
+                                            }
+                                            var entry = {
+                                                empid: Response1[i].emp_id,
+                                                name: Response1[i].employee_quick.name,
+                                                attby: Response1[i].attby[log.dx - 1],
+                                                etb: temp,
+                                                status: tpr,
+                                                etbarr: temparray,
+                                                attbyarr: Response1[i].attby,
+                                                presentarr: Response1[i].present,
+                                                marked: Response1[i].marked,
+                                                monthyear: Response1[i].monthyear,
+                                                active: Response1[i].employee_quick.status,
+
+                                            }
+                                            log.myArray.push(entry)
+                                        }
+
+                                        log.total = log.myArray.length;
+                                        log.entryfun(log.entry);
+                                        log.sort(log.sortfield);
+                                        log.loaderoff();
+                                        $('#mybtn').prop('disabled', false);
+                                        $('#abc').hide();
+                                        $('#abc2').hide();
+                                    }
+
+
+
+                                })
+                                .catch((err) => {
+                                    console.log(err)
+                                    log.error = 1
+                                    log.message_error = "Error connecting the database try again later !"
+                                    log.loaderoff()
+                                    $('#abc').hide();
+                                })
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                            log.error = 1
+                            log.message_error = "Error connecting the database try again later !"
+                            log.loaderoff()
+                            $('#abc').hide();
+                        })
+
+                }, saveatt() {
+                    this.word = "Saving.. "
+                    setTimeout(() => {
+                        window.location.href = "../dashboard"
+                    }, 500)
+
+                }
+
+            }
+        })
+    </script>
+
+    <script src="http://localhost:3420/navbar2/collapsing"></script>
+</body>
+
+</html>

@@ -1,0 +1,168 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>Holiday | Edit Holiday</title>
+</head>
+
+<body>
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
+        integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <!-- Our Custom CSS -->
+    <link rel="stylesheet" href="http://localhost:3420/dashboard/style2">
+    <link rel="stylesheet" href="http://localhost:3420/holiday/css">
+
+
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/axios@0.2.1/dist/axios.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"
+        integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm"
+        crossorigin="anonymous"></script>
+    <!-- Font Awesome JS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+
+
+    <div id="Index">
+        <navbar-component></navbar-component>
+        <div id="navbar-top">
+            <navbar-top></navbar-top>
+            <img src="../images/loading" id="Loading" ref="Loading">
+            <div id="content2" ref="content2" class="center">
+                <div class="bord">
+                    <div class="headin center">Edit Holiday</div>
+                    <div class="roww"></div>
+                    <div class="form-group">
+                        <div class="field">Date :&nbsp&nbsp;</div>
+                        <input class="inp-block" class="inputi form-control" type="date" v-model="date"><br>
+
+                        <div class="field">Name : </div>
+                        <input class="inp-block" class="inputi form-control" placeholder="Enter holiday" type="text"
+                            v-model="name"><br>
+
+
+                    </div>
+                    <div class="roww"></div>
+                    <div v-if="error" class="error">
+                        {{message_error}} !
+                    </div> <br>
+                    <div v-if="success" class="success">
+                        {{message_success}} !
+                    </div>
+                    <div class="center">
+                        <button id='mybtn' @click="save()" style="padding: 5px 30px;" class="btn btn-success">{{word}}
+                        </button>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/vue@2.6.11/dist/vue.js"></script>
+    <script src="http://localhost:3420/navbar2"></script>
+    <script>
+        var log = new Vue({
+            el: "#Index",
+            data: {
+                error: 0,
+                success: 0,
+                message_error: "Fields cannot be left empty !",
+                message_success: "Holiday changed successfully",
+                date: '',
+                name: '',
+                word: "EDIT",
+                idx: '',
+
+            },
+            created: function () {
+                this.load();
+            },
+            methods: {
+                load: function () {
+                    var params = this.getParams(window.location.href)
+
+                    axios.get('http://localhost:3420/holiday/api/holiday?idx=' + params.id)
+                        .then(function (Response1) {
+                            log.idx = params.id
+                            log.name = Response1.holname,
+                                log.date = Response1.date
+                            log.date = log.date.slice(6, 10) + "-" + log.date.slice(3, 5) + "-" + log.date.slice(0, 2)
+                            log.loaderoff()
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                            log.error = 1
+                            log.message_error = "Error connecting the database try again later !"
+                            log.loaderoff()
+                        })
+                }, loaderoff() {
+                    var app = this;
+                    var loading = app.$refs.Loading
+                    loading.style.display = "none"
+                    var content = app.$refs.content2
+                    content.style.display = "block"
+                }, getParams(url) {
+                    var params = {};
+                    var parser = document.createElement('a');
+                    parser.href = url;
+                    var query = parser.search.substring(1);
+                    var vars = query.split('&');
+                    for (var i = 0; i < vars.length; i++) {
+                        var pair = vars[i].split('=');
+                        params[pair[0]] = decodeURIComponent(pair[1]);
+                    }
+                    return params;
+                }, save() {
+                    $('#mybtn').prop('disabled', true);
+                    log.word = 'Saving..'
+                    if (log.date == '') {
+                        this.error = 1;
+                        this.message_error = "Enter correct Date !"
+                        log.word = 'SAVE'
+                        $('#mybtn').prop('disabled', false);
+                        return;
+                    } else if (log.name == '') {
+                        this.error = 1;
+                        log.word = 'SAVE'
+                        this.message_error = "Enter correct Name !"
+                        $('#mybtn').prop('disabled', false);
+                        return;
+                    } else {
+                        var x = log.date.slice(8, 10) + '-' + log.date.slice(5, 7) + '-' + log.date.slice(0, 4);
+                        $.post('./edit_holpost?idx=' + log.idx, {
+                            year: log.date.slice(0, 4),
+                            name: log.name,
+                            date: x,
+                        }, function (data) {
+                            console.log(data.message)
+                            if (data.message != 'true') {
+                                log.error = 1
+                                log.message_error = data.message
+                                $('#mybtn').prop('disabled', false);
+                            } else {
+                                log.error = 0
+                                log.success = 1
+                                log.message_success = "Holiday Edited SuccessFully !"
+                                setTimeout(() => {
+                                    window.location.href = "manage_holiday"
+                                }, 1000);
+                            }
+                        })
+                    }
+                }
+
+            }
+        })
+    </script>
+
+    <script src="http://localhost:3420/navbar2/collapsing"></script>
+</body>
+
+</html>

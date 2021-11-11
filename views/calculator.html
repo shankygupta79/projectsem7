@@ -1,0 +1,467 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>Calculator </title>
+</head>
+
+<body>
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
+        integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <!-- Our Custom CSS -->
+    <link rel="stylesheet" href="http://localhost:3420/dashboard/style2">
+    <link rel="stylesheet" href="../payslips/css">
+
+
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/axios@0.2.1/dist/axios.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"
+        integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm"
+        crossorigin="anonymous"></script>
+
+
+    <!-- Font Awesome JS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+
+
+    <div id="Index" id="navba">
+        <navbar-component></navbar-component>
+        <div id="navbar-top">
+            <navbar-top></navbar-top>
+
+            <div>
+                <div class="bord">
+                    <div class="headin center">Calculator</div>
+                    <div class="roww"></div>
+                    <table class="report">
+                        <tr>
+                            <td><strong class="options">Select Year :</strong></td>
+                            <td><strong class="options">Select Month :</strong></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+
+                            <td><select class="form-control options" v-model="select_year">
+                                    <option v-for="i in yearlist">{{i}}</option>
+                                </select></td>
+                            <td><select class="form-control options" v-model="select_month">
+                                    <option v-for="i in monthlist">{{i}}</option>
+                                </select></td>
+                            <td>
+                                <div class="center">
+                                    <button id='mybtn' @click="submit()" style="padding: 5px 30px;"
+                                        class="btn btn-success">Show
+                                        Analysis &nbsp;&nbsp;<i class="fa fa-spinner fa-spin" id='abc'></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr v-if="monthstart">
+                            <td colspan="3"><b style="color: red;">Note : Previous Month is selected automatically !</b>
+                            </td>
+                        </tr>
+                    </table><br>
+                    <div v-if="error2" class="error">
+                        {{message_error2}} !
+                    </div> <br>
+                    <img src="../images/loading" v-show="paylist" id="Loading" ref="Loading">
+                    <div v-show="paylist" id="content2" ref="content2">
+                        <div v-if="error" class="error">
+                            {{message_error}} !
+                        </div> <br>
+                        <div v-if="success" class="success">
+                            {{message_success}} !
+                        </div> <br>
+                        <div>
+                            <div style="display: inline-block;">
+                                <label><u>Check All</u></label>
+                                <input type="checkbox" id="checkall">
+                            </div>
+                            <div style="display: inline-block;">
+                                <label>Add Bonus</label>
+                                <input type="checkbox" id="bonuscheck">
+                            </div>
+
+                            <div style="display: inline-block;">
+                                <label>Add Deductions</label>
+                                <input type="checkbox" id="deductioncheck">
+                            </div>
+                            <div style="display: inline-block;">
+                                <label>Add Text</label>
+                                <input type="checkbox" id="textcheck">
+                            </div>
+                            <div style="display: inline-block;">
+                                <label>Add Transfer</label>
+                                <input type="checkbox" id="transfercheck">
+                            </div>
+                            <div style="display: inline-block;">
+                                <label>Loan Payments</label>
+                                <input type="checkbox" id="loani">
+                            </div>
+                        </div>
+                        <div style="text-align: right;">
+                            <b style="display: inline-block;">Sort By : </b>
+                            <div style="display: inline-block;">
+                                <select @change="sort(sortfield)" class="form-control" v-model="sortfield">
+                                    <option v-for="i in sortarr">
+                                        {{i}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div><br>
+                        <div class="empbox center" v-for="i in list.length">
+                            <b>{{list[i-1]['employee_quick']['name']}}</b><br>
+                            <table class="tabman">
+                                <tr>
+                                    <td colspan="2">
+                                        <img v-bind:src="list[i-1]['employee_quick']['photo']" height="80px"
+                                            width="80px">
+                                    </td>
+                                    <td> <b>Net Pay: </b></td>
+                                    <td><b>{{symbol}}
+                                            {{(parseInt(list[i-1]['employee_quick'].salary)+parseInt(list[i-1].bonus)+parseInt(list[i-1].extratimetotoal)-parseInt(list[i-1].deduction)-parseInt(list[i-1].advance)-parseInt(list[i-1].emi)-parseInt(list[i-1].holidays)-parseInt(list[i-1].transfer)).toLocaleString('en-IN')}}</b>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td> <b>Salary : </b></td>
+                                    <td class="green">
+                                        {{symbol}}{{parseInt(list[i-1]['employee_quick'].salary).toLocaleString('en-IN')}}
+                                    </td>
+
+                                    <td> <b>Holidays : </b></td>
+                                    <td class="red">{{symbol}}{{parseInt(list[i-1].holidays).toLocaleString('en-IN')}}
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td> <b>Extra Time : </b></td>
+                                    <td class="red">
+                                        {{symbol}}{{parseInt(list[i-1].extratimetotoal).toLocaleString('en-IN')}}</td>
+
+                                    <td> <b>Advance : </b></td>
+                                    <td class="red">{{symbol}}{{list[i-1].advance}}</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-size: 1.2em;"> <b>Total Loan : </b></td>
+                                    <td style="font-size: 1.2em;">{{symbol}}
+                                        {{
+                                        ((parseInt(list[i-1]['employee_quick'].totalloan)-parseInt(list[i-1].emi)+parseInt(list[i-1].emiold)).toLocaleString('en-IN'))}}
+                                    </td>
+
+                                    <td class="loani wow"> <b>EMI : </b></td>
+                                    <td class="red loani wow" v-show="!edit">
+                                        {{symbol}}{{parseInt(list[i-1].emi).toLocaleString('en-IN')}}</td>
+                                    <td class="loani wow" v-show="edit"><input v-model="list[i-1].emi" type="number">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="bonus wow"> <b>Bonus : </b></td>
+                                    <td class="green bonus wow" v-show="!edit">
+                                        {{symbol}}{{parseInt(list[i-1].bonus).toLocaleString('en-IN')}}</td>
+                                    <td class="bonus wow" v-show="edit"><input v-model="list[i-1].bonus" type="number">
+                                    </td>
+
+                                    <td class="deduction wow"> <b>Deduction: </b></td>
+                                    <td class="red deduction wow" v-show="!edit">
+                                        {{symbol}}{{parseInt(list[i-1].deduction).toLocaleString('en-IN')}}</td>
+                                    <td class="deduction wow" v-show="edit"><input v-model="list[i-1].deduction"
+                                            type="number"> </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="transfer wow"> <b>Balance : </b></td>
+                                    <td class="transfer wow">
+                                        <b>{{symbol}}{{(parseInt(list[i-1]['employee_quick'].salary)+parseInt(list[i-1].bonus)+parseInt(list[i-1].extratimetotoal)-parseInt(list[i-1].deduction)-parseInt(list[i-1].advance)-parseInt(list[i-1].holidays)-parseInt(list[i-1].emi)).toLocaleString('en-IN')}}</b>
+                                    </td>
+
+
+                                    <td class="transfer wow"> <b>Transfer : </b></td>
+                                    <td class="yellow transfer wow" v-show="!edit">
+                                        {{symbol}}{{parseInt(list[i-1].transfer).toLocaleString('en-IN')}}
+                                    </td>
+                                    <td class="transfer wow" v-show="edit"><input v-model="list[i-1].transfer"
+                                            type="number"> </td>
+                                </tr>
+                                <tr>
+                                    <td class="text wow"> <b>Narration : </b></td>
+                                    <td class="text wow" v-show="!edit" colspan="3">{{list[i-1].text}}</td>
+                                    <td class="text wow" colspan="3" v-show="edit"><input class="hey180"
+                                            v-model="list[i-1].text" type="text"> </td>
+
+                                </tr>
+
+                            </table>
+
+
+
+                        </div>
+
+                        <div class="center" v-if="!edit">
+                            <button @click="editfun()" style="padding: 5px 30px;" class="btn btn-success">Edit</button>
+                        </div>
+                        <div class="center" v-if="edit">
+                            <button id='mybtn2' @click="save()" style="padding: 5px 30px;"
+                                class="btn btn-success">{{word}}
+                                &nbsp;&nbsp;<i class="fa fa-spinner fa-spin" id='abc2'></i></button>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+    <script src="https://unpkg.com/vue@2.6.11/dist/vue.js"></script>
+    <script src="http://localhost:3420/navbar2"></script>
+
+    <!-- jQuery CDN - Slim version (=without AJAX) -->
+    <script>
+        var log = new Vue({
+            el: "#Index",
+            data: {
+                myArray: [],
+                sortfield: 'Name',
+                symbol: '',
+                list: [],
+                sortarr: ['Name', 'Department', 'Designation', 'Date of Joining'],
+                sortarr2: ['name', 'des', 'dep', 'doj'],
+                yearlist: [],
+                arr: ['01-', '02-', '03-', '04-', '05-', '06-', '07-', '08-', '09-', '10-', '11-', '12-'],
+                select_year: '',
+                select_month: '',
+                monthstart: 0,
+                paylist: 0,
+                word: 'Save',
+                monthlist: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', "December"],
+                monthday: [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
+                edit: 0,
+                success: 0,
+                error: 0,
+                message_error: "Enter the full details",
+                error2: 0,
+                message_error2: "Enter the full details",
+                message_success: "Attendace edited loaded successfully",
+            },
+            created: function () {
+                this.load();
+            },
+            methods: {
+                load: function () {
+                    $('#abc').hide()
+                    $('#abc2').hide()
+                    this.year();
+                }, loaderoff() {
+                    var app = this;
+                    var loading = app.$refs.Loading
+                    loading.style.display = "none"
+                    var content = app.$refs.content2
+                    content.style.display = "block"
+                    $('#abc').hide()
+                }, loaderon() {
+                    var app = this;
+                    var loading = app.$refs.Loading
+                    loading.style.display = "block"
+                    var content = app.$refs.content2
+                    content.style.display = "none"
+                }, sort(name, type) {
+                    var i = 0;
+                    if (name == "Name") {
+                        i = 0
+                    } else if (name == 'Department') {
+                        i = 1
+                    } else if (name == 'Designation') {
+                        i = 2
+                    } else if (name == "Date of Joining") {
+                        i = 3
+                    }
+                    this.sortfield = this.sortarr2[i];
+                    if (this.sortfield == 'name' || this.sortfield == 'dep' || this.sortfield == 'des') {
+                        this.list.sort(this.compare)
+                    } else if (this.sortfield == 'doj') {
+                        this.list.sort(this.comparedate)
+
+                    }
+
+                }, compare(a, b) {
+                    var nameA = a['employee_quick'][this.sortfield]
+                    var nameB = b['employee_quick'][this.sortfield]
+                    if (nameA < nameB) { return -1; }
+                    if (nameA > nameB) { return 1; }
+                    return 0;
+                },
+                comparedate(a, b) {
+                    var nameA = a['employee_quick'][this.sortfield]
+                    var nameB = b['employee_quick'][this.sortfield]
+                    nameA = nameA.slice(6, 10) + nameA.slice(3, 5) + nameA.slice(0, 2)
+                    nameB = nameB.slice(6, 10) + nameB.slice(3, 5) + nameB.slice(0, 2)
+                    if (nameA < nameB) {
+                        return -1;
+                    }
+                    if (nameA > nameB) {
+                        return 1;
+                    }
+                    return 0;
+                }, year() {
+                    var d = new Date();
+                    var n = d.getFullYear() + 1;
+
+                    var y = 2020;
+                    do {
+                        this.yearlist.push(y)
+                        y++;
+                    } while (n != y);
+
+                    if (d.getDate() <= 4) {
+                        this.monthstart = 1;
+                        this.select_month = this.monthlist[((d.getMonth() - 1 + 12) % 12)];
+                        this.select_year = n - 1;
+                        if (d.getMonth() == 0) {
+                            this.select_year--;
+                        }
+                    } else {
+                        this.select_month = this.monthlist[d.getMonth()];
+                        this.select_year = n - 1;
+                    }
+
+                }, submit() {
+                    $('#mybtn').prop('disabled', true);
+
+                    log.loaderon()
+                    if (log.select_month == "" || log.select_year == "") {
+                        log.error = 1
+                        $('#mybtn').prop('disabled', false);
+                        return
+                    }
+                    $('#abc').show()
+                    log.paylist = 1
+                    axios.get('http://localhost:3420/payslips/api/data?date=' + log.arr[log.monthlist.indexOf(log.select_month)] + log.select_year)
+                        .then(function (Response1) {
+                            log.list = Response1
+                            if (Response1.length == 0) {
+                                console.log(Response1)
+                                log.error2 = 1
+                                log.paylist = 0
+                                log.message_error2 = "NO RECORD FOUND"
+                                log.loaderoff()
+                                $('#mybtn').prop('disabled', false);
+                                $('#abc').hide()
+                                return
+
+                            }
+
+                            var days = log.monthday[log.monthlist.indexOf(log.select_month)]
+                            for (var i = 0; i < log.list.length; i++) {
+                                log.list[i].emiold = log.list[i].emi;
+                                var extrarr = log.list[i].extratime.split(';')
+                                var prearr = log.list[i].present
+                                var extra = 0
+                                var ab = 0
+                                for (var j = 0; j < days; j++) {
+                                    extra = extra + parseInt(extrarr[j])
+                                    if (prearr[j] == 'A') {
+                                        ab++
+                                    }
+                                }
+                                $('#mybtn').prop('disabled', false);
+                                log.list[i].extratimetotoal = extra
+                                log.list[i].holidays = Math.round((log.list[i]['employee_quick'].salary / days) * ab)
+                            }
+                            axios.get('http://localhost:3420/dashboard/api/symbol')
+                                .then(function (Response2) {
+                                    log.symbol = Response2
+                                })
+                                .catch((err) => {
+                                    console.log(err)
+                                    log.error = 1
+                                    log.message_error = "Error connecting the database try again later !"
+                                    log.loaderoff()
+                                })
+                            log.loaderoff()
+
+                            log.sort(this.sortfield);
+
+
+
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                            log.error = 1
+                            log.message_error = "Error connecting the database try again later !"
+                            log.loaderoff()
+                        })
+
+                }, editfun() {
+                    this.edit = 1
+                }, post() {
+                    $.post('./api/calc', {
+                        list: log.list,
+                        x: log.list[0].monthyear,
+
+                    }, function (data) {
+                        console.log(data.message)
+                        if (data.message != 'true') {
+                            log.error = 1
+                            log.message_error = data.message
+                            log.word = "Save Again"
+                            $('#mybtn').prop('disabled', false);
+                            $('#abc2').hide();
+                        } else {
+                            log.error = 0
+                            log.success = 1
+                            log.message_success = "Calculations saved SuccessFully !"
+                            setTimeout(() => {
+                                window.location.href = "list"
+                            }, 500);
+
+
+                        }
+                    })
+                }, save() {
+                    $('#mybtn2').prop('disabled', true);
+                    $('#abc2').show();
+                    log.word = 'Saving..';
+                    log.post()
+
+                }
+
+            }
+        })
+        $('#bonuscheck').on('click', function () {
+
+            $('.bonus').toggleClass('wow');
+        });
+        $('#loani').on('click', function () {
+            $('.loani').toggleClass('wow');
+        });
+        $('#textcheck').on('click', function () {
+
+            $('.text').toggleClass('wow');
+        });
+        $('#deductioncheck').on('click', function () {
+
+            $('.deduction').toggleClass('wow');
+        });
+        $('#transfercheck').on('click', function () {
+
+            $('.transfer').toggleClass('wow');
+        });
+        $('#checkall').on('click', function () {
+            $('.deduction').toggleClass('wow');
+            $('.transfer').toggleClass('wow');
+            $('.text').toggleClass('wow');
+            $('.loani').toggleClass('wow');
+            $('.bonus').toggleClass('wow');
+        });
+    </script>
+
+    <script src="http://localhost:3420/navbar2/collapsing"></script>
+</body>
+
+</html>
