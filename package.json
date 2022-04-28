@@ -1,5 +1,5 @@
 {
-  "name": "payroll",
+  "name": "payroll", 
   "version": "2.0.0",
   "description": "Payroll Software",
   "main": "server.js", 
