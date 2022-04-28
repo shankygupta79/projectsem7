@@ -1,4 +1,4 @@
-const passport = require('passport')
+const passport = require('passport') 
 const GoogleStrategy = require('passport-google-oauth20')
 const FacebookStrategy = require('passport-facebook')
 const LocalStrategy = require('passport-local').Strategy
