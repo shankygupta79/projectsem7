@@ -9,7 +9,7 @@ Vue.component('navbar-component', {
             var val = (localStorage.getItem('panelTheme'));
             if (val == 'Theme 1') {
                 //Blue
-            } 
+            }
 
             return 0
         }, changecolor: function () {
@@ -32,7 +32,7 @@ Vue.component('navbar-component', {
 
         },
 
-    template:  `<nav id="sidebar">
+    template: `<nav id="sidebar">
     <div class="sidebar-header">
         <h3><img src="../Images/logo" class="logoi" ></h3>
     </div>
@@ -176,7 +176,7 @@ Vue.component('navbar-top', {
         <i class="fa fa-caret-down"></i>
         </button>
         <div class="dropdown2-content">
-            <a href="http://localhost:3420/auth/logout" class="hov">Logout &nbsp<i class="fa fa-sign-out" aria-hidden="true"></i> </a>
+            <a href="https://projectsem8.herokuapp.com/auth/logout" class="hov">Logout &nbsp<i class="fa fa-sign-out" aria-hidden="true"></i> </a>
           </div>
     </div>
     </div>
@@ -184,4 +184,3 @@ Vue.component('navbar-top', {
   `
     ,
 });
- 

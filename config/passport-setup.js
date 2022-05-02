@@ -1,4 +1,4 @@
-const passport = require('passport') 
+const passport = require('passport')
 const GoogleStrategy = require('passport-google-oauth20')
 const FacebookStrategy = require('passport-facebook')
 const LocalStrategy = require('passport-local').Strategy
@@ -29,7 +29,7 @@ passport.deserializeUser((id, done) => {
 })
 passport.use(
     new GoogleStrategy({
-        callbackURL: "http://localhost:3420/auth/google/redirect",
+        callbackURL: "https://projectsem8.herokuapp.com/auth/google/redirect",
         clientID: process.env.clientIDg,
         clientSecret: process.env.clientSecretg
         //options for google strategy
@@ -52,7 +52,7 @@ passport.use(
                         authenticationType: 'Google',
                         admin: 1,
                         currency: '₹',
-                        logo: "https://res.cloudinary.com/shankygupta79/image/upload/v1633782888/Yellow_School_Supply_Company_Logo_wb3std.png",
+                        logo: "https://res.cloudinary.com/shankygupta79/image/upload/v1651486941/Yellow_School_Supply_Company_Logo_wb3std_shidir.png",
                         office_close: '0000000',
 
                     }).then((newUser) => {
@@ -79,7 +79,7 @@ passport.use(
 passport.use(new FacebookStrategy({
     clientID: process.env.clientIDf,
     clientSecret: process.env.clientSecretf,
-    callbackURL: "http://localhost:3420/auth/facebook/redirect",
+    callbackURL: "https://projectsem8.herokuapp.com/auth/facebook/redirect",
     profileFields: ['id', 'displayName', 'photos', 'email']
 },
     function (accessToken, refreshToken, profile, done) {
@@ -106,7 +106,7 @@ passport.use(new FacebookStrategy({
                         authenticationType: 'Facebook',
                         admin: 1,
                         currency: '₹',
-                        logo: "https://res.cloudinary.com/shankygupta79/image/upload/v1633782888/Yellow_School_Supply_Company_Logo_wb3std.png",
+                        logo: "https://res.cloudinary.com/shankygupta79/image/upload/v1651486941/Yellow_School_Supply_Company_Logo_wb3std_shidir.png",
                         office_close: '0000000',
                     }).then((newUser) => {
 

@@ -1,9 +1,9 @@
 $(document).ready(function () {
 
-    axios.get('http://localhost:3420/dashboard/logo')
+    axios.get('https://projectsem8.herokuapp.com/dashboard/logo')
         .then(function (Response1) {
             console.log(Response1)
-            $('.logoi').attr("src", "https://res.cloudinary.com/shankygupta79/image/upload/v1633782888/Yellow_School_Supply_Company_Logo_wb3std.png");
+            $('.logoi').attr("src", "https://res.cloudinary.com/shankygupta79/image/upload/v1651486941/Yellow_School_Supply_Company_Logo_wb3std_shidir.png");
         })
     $('#sidebarCollapse').on('click', function () {
         $('#sidebar, #navbar-top,#content2').toggleClass('active');

@@ -1,4 +1,4 @@
-const express = require('express'); 
+const express = require('express');
 const SERVER_PORT = process.env.PORT || 3420
 const path = require('path')
 const app = express();
@@ -52,7 +52,7 @@ app.use('/images', require('./routes/images'));
 app.use('/payslips', require('./routes/payslips'));
 
 app.listen(SERVER_PORT, function () {
-    console.log("Server started on http://localhost:3420/");
+    console.log("Server started on https://projectsem8.herokuapp.com/");
 });
 
 

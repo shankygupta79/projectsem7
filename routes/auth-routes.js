@@ -87,7 +87,7 @@ route.post('/googleapp', (req, res) => {
                     authenticationType: 'Google',
                     admin: 1,
                     currency: '₹',
-                    logo: "https://res.cloudinary.com/shankygupta79/image/upload/v1633782888/Yellow_School_Supply_Company_Logo_wb3std.png",
+                    logo: "https://res.cloudinary.com/shankygupta79/image/upload/v1651486941/Yellow_School_Supply_Company_Logo_wb3std_shidir.png",
                     office_close: '0000000',
                     Expotoken: req.body.expotoken
                 }).then((newUser) => {

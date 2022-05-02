@@ -1,4 +1,4 @@
-const route = require('express').Router(); 
+const route = require('express').Router();
 var crypto = require('crypto');
 const Sequelize = require('sequelize')
 var path = require('path')
@@ -15,7 +15,7 @@ function isEmpty(obj) {
     return true;
 }
 route.get('/', (req, res) => {
-    res.redirect('http://localhost:3420/login')
+    res.redirect('https://projectsem8.herokuapp.com/login')
 })
 
 
@@ -157,7 +157,7 @@ route.post('/signup', (req, res) => {
                     valid: false,
                     admin: 1,
                     currency: '₹',
-                    logo: "https://res.cloudinary.com/shankygupta79/image/upload/v1633782888/Yellow_School_Supply_Company_Logo_wb3std.png",
+                    logo: "https://res.cloudinary.com/shankygupta79/image/upload/v1651486941/Yellow_School_Supply_Company_Logo_wb3std_shidir.png",
                     office_close: '0000000',
                 }).then((user) => {
 
@@ -200,14 +200,14 @@ function sendmail(tomailid, hash, fp) {
             from: process.env.mail,
             to: tomailid,
             subject: 'Reset Your Password',
-            text: 'Reset your password by clicking on the link (link is valid upto five minutes only) ' + 'http://localhost:3420/forgot?id=' + hash + '&tm=' + tm + '&mail=' + tomailid,
+            text: 'Reset your password by clicking on the link (link is valid upto five minutes only) ' + 'https://projectsem8.herokuapp.com/forgot?id=' + hash + '&tm=' + tm + '&mail=' + tomailid,
         };
     } else if (fp == 0) {
         mailDetails = {
             from: process.env.mail,
             to: tomailid,
             subject: 'Activate Your Account',
-            text: 'Verify your account by clicking on the link ' + 'http://localhost:3420/activate?id=' + hash + '&mail=' + tomailid + '&tm=' + tm + ' .' + 'This Link will expire in 10 minutes',
+            text: 'Verify your account by clicking on the link ' + 'https://projectsem8.herokuapp.com/activate?id=' + hash + '&mail=' + tomailid + '&tm=' + tm + ' .' + 'This Link will expire in 10 minutes',
         };
     }
     // https://myaccount.google.com/lesssecureapps
